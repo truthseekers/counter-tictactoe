@@ -5,12 +5,12 @@ import Board from './Board';
 class Game extends React.Component {
 
     handleClick(i) {
-        console.log("in handleclick");
-        const squares = this.props.squares.slice();
-        console.log(squares);
-        squares[i] = 'X';
-        console.log(squares);
-        this.props.dispatch({ type: 'CLICKSQUARE', index: i, newSquares: squares})
+        //console.log("in handleclick");
+        //console.log(this.props.squares);
+       const squares = this.props.squares.slice();
+        squares[i] = this.props.xisNext ? 'X' : 'O';
+        //console.log(squares);
+        this.props.dispatch({ type: 'CLICKSQUARE', index: i, newSquares: squares, isNext: this.props.xisNext })
     }
 
   render() {
@@ -22,9 +22,11 @@ class Game extends React.Component {
             />
         <h2>Game</h2>
         <div>
-          <span>I am a span in the game</span>
+          <span>say this: </span>
             {this.props.saythis}
+          <span>stepNumber: </span>
             {this.props.stepNumber}
+          <span>fontCurrent: </span>
             {this.props.fontCurrent}
         </div>
       </div>
@@ -35,9 +37,12 @@ class Game extends React.Component {
 function mapStateToProps(state) {
   return {
       saythis: state.saythis,
-      squares: state.squares,
+      squares: state.history.squares,
+      /*history: {
+          squares: state.history.squares,
+      },*/
       stepNumber: 0,
-      xisNext: true,
+      xisNext: state.xisNext,
       fontCurrent: 'normal'
   };
 }
