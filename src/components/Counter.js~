@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 class Counter extends React.Component {
-    increment = () => {
+  increment = () => {
     this.props.dispatch({ type: 'INCREMENT' });
   }
 

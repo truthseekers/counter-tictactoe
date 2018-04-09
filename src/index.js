@@ -15,20 +15,32 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch(action.type) {
-    case 'INCREMENT':
-      return {
-        count: state.count + 1
-      };
-    case 'DECREMENT':
-      return {
-        count: state.count - 1
-      };
+  case 'INCREMENT':
+      return Object.assign({}, state, {
+          count: state.count + 1
+      })
+      //return count: state.count + 1
+  case 'DECREMENT':
+      return Object.assign({}, state, {
+          count: state.count - 1
+      })
+  case 'CLICKSQUARE':
+      console.log("state is: ");
+      console.log(state.squares);
+      console.log(state.squares[action.index] = 'x');
+      console.log(state.squares);
+      return Object.assign({}, state, {
+              squares: action.newSquares 
+      });
+          //squares: state.squares[action.index] = 'X'
+      
     default:
       return state;
   }
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer,
+                        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() );
 
 const App = () => (
   <Provider store={store}>
