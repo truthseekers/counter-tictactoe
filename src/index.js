@@ -1,12 +1,16 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { render } from 'react-dom';
-import Counter from './Counter';
+import Counter from './components/Counter';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import Game from './components/Game';
+import './index.css';
 
 const initialState = {
     count: 0,
-    saythis: "Hello there I like pie soooo much"
+    saythis: "Hello there I like pie soooo much",
+    squares: Array(9).fill(null)
 };
 
 function reducer(state = initialState, action) {
@@ -28,9 +32,9 @@ const store = createStore(reducer);
 
 const App = () => (
   <Provider store={store}>
-    <Counter/>
+        <div><Counter/>
+        <Game /></div>
   </Provider>
 );
 
 render(<App />, document.getElementById('root'));
-
