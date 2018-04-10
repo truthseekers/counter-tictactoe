@@ -10,9 +10,9 @@ import './index.css';
 const initialState = {
     count: 0,
     saythis: "Hello there I like pie soooo much",
-    history: {
+    history: [{
         squares: Array(9).fill(null),
-    },
+    }],
     stepNumber: 0,
     xisNext: true,
     fontCurrent: 'normal'
@@ -30,12 +30,12 @@ function reducer(state = initialState, action) {
           count: state.count - 1
       })
   case 'CLICKSQUARE':
-      console.log("state is: ");
-      console.log(state);
+      //console.log("action is: ");
+      //console.log(action);
       return Object.assign({}, state, {
-          history: {
-             squares: action.newSquares,   
-          },
+          history: action.history.concat([{
+              squares: action.newSquares,
+          }]),
           xisNext: !action.isNext
       });
       

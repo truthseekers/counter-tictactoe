@@ -37,7 +37,7 @@ class Board extends React.Component {
 function mapStateToProps(state) {
   return {
       saythis: state.saythis,
-      squares: state.history.squares,
+      squares: state.history[state.history.length - 1].squares,
       stepNumber: 0,
       xisNext: true,
       fontCurrent: 'normal'
