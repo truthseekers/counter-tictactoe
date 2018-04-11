@@ -9,15 +9,11 @@ import './index.css';
 
 const initialState = {
     count: 0,
-    past: [{
-        stepNumber: 0,
-        squares: Array(9).fill(null),
-        xisNext: true
-    }],
+    past: [],
     future: [],
     squares: Array(9).fill(null),
-    stepNumber: 1,
-    xisNext: false,
+    stepNumber: 0,
+    xisNext: true,
     fontCurrent: 'normal'
 };
 
@@ -56,6 +52,7 @@ function reducer(state = initialState, action) {
 
   case 'JUMPTO':
       console.log("I jumped to move: " + action.index);
+      var futureState = state.future;
       var oldCurrent = {
           squares: state.squares,
           stepNumber: state.stepNumber,
@@ -67,18 +64,29 @@ function reducer(state = initialState, action) {
       var newCurrent = pastIncludingCurrent[action.index];
       console.log("newCurrent: ");
       console.log(newCurrent);
-      
-      var futureState = {
-          squares: state.squares,
-          stepNumber: state.stepNumber,
-          xisNext: action.isNext,
-      };
+
+      if (state.past.length == state.stepNumber) {
+          futureState = {
+              squares: state.squares,
+              stepNumber: state.stepNumber,
+              xisNext: action.isNext,
+          };
+          
+      }
+
+      if (action.index == state.past.length) {
+          return Object.assign({}, state, {
+              squares: state.future.squares,
+              stepNumber: state.future.stepNumber,
+              xisNext: state.future.xisNext
+          });
+      }
 
       return Object.assign({}, state, {
           squares: newCurrent.squares,
           stepNumber: newCurrent.stepNumber,
           xisNext: newCurrent.xisNext,
-          future: [futureState]
+          future: futureState
       });
       
       

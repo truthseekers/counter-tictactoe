@@ -21,8 +21,8 @@ class Game extends React.Component {
             xisNext: this.props.xisNext
         };
         const history = this.props.past;
-        //const allMoves = history.concat(current);
-        const moves = history.map((step, move) => {
+        const allMoves = history.concat(current);
+        const moves = allMoves.map((step, move) => {
             const desc = move ?
                   'go to move #' + move :
                   'Go to game start';
