@@ -9,12 +9,15 @@ import './index.css';
 
 const initialState = {
     count: 0,
-    saythis: "Hello there I like pie soooo much",
-    history: [{
+    past: [{
+        stepNumber: 0,
         squares: Array(9).fill(null),
+        xisNext: true
     }],
-    stepNumber: 0,
-    xisNext: true,
+    future: [],
+    squares: Array(9).fill(null),
+    stepNumber: 1,
+    xisNext: false,
     fontCurrent: 'normal'
 };
 
@@ -30,14 +33,54 @@ function reducer(state = initialState, action) {
           count: state.count - 1
       })
   case 'CLICKSQUARE':
-      //console.log("action is: ");
-      //console.log(action);
+      var newSquares = state.squares.slice();
+      newSquares[action.index] = state.xisNext ? 'X' : 'O';
+      var pastState = {
+          squares: state.squares,
+          stepNumber: state.stepNumber,
+          xisNext: action.isNext,
+      }
+      console.log("stepNumber:" + state.stepNumber);
+      if (state.stepNumber < state.past.length) {
+          console.log("stepNumber is: " + state.stepNumber + "past.length: " + state.past.length);
+          state.past.splice(0, state.stepNumber);
+          console.log(state.past);
+      }
+
       return Object.assign({}, state, {
-          history: action.history.concat([{
-              squares: action.newSquares,
-          }]),
+          past: state.past.concat(pastState),
+          squares: newSquares,
+          stepNumber: state.stepNumber + 1,
           xisNext: !action.isNext
       });
+
+  case 'JUMPTO':
+      console.log("I jumped to move: " + action.index);
+      var oldCurrent = {
+          squares: state.squares,
+          stepNumber: state.stepNumber,
+          xisNext: state.xisNext
+      };
+      var pastIncludingCurrent = state.past.concat(oldCurrent);
+      console.log("Pastincludingcurrent: ");
+      console.log(pastIncludingCurrent);
+      var newCurrent = pastIncludingCurrent[action.index];
+      console.log("newCurrent: ");
+      console.log(newCurrent);
+      
+      var futureState = {
+          squares: state.squares,
+          stepNumber: state.stepNumber,
+          xisNext: action.isNext,
+      };
+
+      return Object.assign({}, state, {
+          squares: newCurrent.squares,
+          stepNumber: newCurrent.stepNumber,
+          xisNext: newCurrent.xisNext,
+          future: [futureState]
+      });
+      
       
     default:
       return state;

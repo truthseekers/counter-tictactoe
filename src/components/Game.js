@@ -5,16 +5,35 @@ import Board from './Board';
 class Game extends React.Component {
 
     handleClick(i) {
-//        console.log("value of this.props.history.length - 1: ");
-        const squares = this.props.history[this.props.history.length - 1].squares;
-//        console.log("value of squares: ");
-//        const squares = this.props.squares.slice();
-//        console.log(squares);
-        squares[i] = this.props.xisNext ? 'X' : 'O';
-        this.props.dispatch({ type: 'CLICKSQUARE', index: i, newSquares: squares, isNext: this.props.xisNext, history: this.props.history })
+        //const squares = this.props.history[history.length - 1].squares;
+        //squares[i] = this.props.xisNext ? 'X' : 'O';
+        this.props.dispatch({ type: 'CLICKSQUARE', index: i, isNext: this.props.xisNext, squares: this.props.squares })
     }
 
-  render() {
+    jumpTo(i) {
+        this.props.dispatch({ type: 'JUMPTO', index: i})
+    }
+
+    render() {
+        const current = {
+            squares: this.props.squares,
+            stepNumber: this.props.stepNumber,
+            xisNext: this.props.xisNext
+        };
+        const history = this.props.past;
+        //const allMoves = history.concat(current);
+        const moves = history.map((step, move) => {
+            const desc = move ?
+                  'go to move #' + move :
+                  'Go to game start';
+            return (
+                <li key={move}>
+                  <button onClick={() => this.jumpTo(move)}>
+                    {desc}
+                  </button>
+                </li>
+            );
+        });
     return (
         <div className="game">
           <div className="game-board"/>
@@ -22,14 +41,9 @@ class Game extends React.Component {
             onClick={(i) => this.handleClick(i)}
             />
         <h2>Game</h2>
-        <div>
-          <span>say this: </span>
-            {this.props.saythis}
-          <span>stepNumber: </span>
-            {this.props.stepNumber}
-          <span>fontCurrent: </span>
-            {this.props.fontCurrent}
-        </div>
+        <ol>
+          {moves}
+        </ol>
       </div>
     )
   }
@@ -37,10 +51,10 @@ class Game extends React.Component {
 
 function mapStateToProps(state) {
   return {
-      saythis: state.saythis,
-      squares: state.history[state.history.length - 1].squares,
-      history: state.history,
-      stepNumber: 0,
+      squares: state.squares,
+      //      history: state.history,
+      past: state.past,
+      stepNumber: state.stepNumber,
       xisNext: state.xisNext,
       fontCurrent: 'normal'
   };

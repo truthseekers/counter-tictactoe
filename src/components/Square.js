@@ -22,7 +22,6 @@ class Square extends React.Component {
 
 function mapStateToProps(state) {
   return {
-      saythis: state.saythis,
       squares: state.squares,
       stepNumber: 0,
       xisNext: true,

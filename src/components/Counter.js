@@ -18,7 +18,6 @@ class Counter extends React.Component {
           <button onClick={this.decrement}>-</button>
           <span>{this.props.count}</span>
             <button onClick={this.increment}>+</button>
-            {this.props.saythis}
         </div>
       </div>
     )
@@ -27,8 +26,7 @@ class Counter extends React.Component {
 
 function mapStateToProps(state) {
   return {
-      count: state.count,
-      saythis: state.saythis
+      count: state.count
   };
 }
 
