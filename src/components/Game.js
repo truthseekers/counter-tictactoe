@@ -5,7 +5,7 @@ import Board from './Board';
 class Game extends React.Component {
 
     handleClick(i) {
-        var moveState = this.calculateMoveState(this.props.xIsNext, i);
+        var moveState = this.calculateMoveState(this.props.xisNext, i);
         this.props.dispatch({ type: 'CLICKSQUARE', index: i, recentMove: moveState, isNext: this.props.xisNext, squares: this.props.squares })
     }
 
@@ -15,8 +15,10 @@ class Game extends React.Component {
 
     calculateMoveState(bool, location){
         if (bool) {
+            console.log("I a x");
             return location + " set to: " + "X";
         } else {
+            console.log("I am O");
             return location + " set to: " + "O";
         }
     }
