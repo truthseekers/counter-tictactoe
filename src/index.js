@@ -12,6 +12,7 @@ const initialState = {
     past: [],
     future: [],
     squares: Array(9).fill(null),
+    move: 'Go to game start',
     stepNumber: 0,
     xisNext: true,
     fontCurrent: 'normal'
@@ -34,6 +35,7 @@ function reducer(state = initialState, action) {
       var pastState = {
           squares: state.squares,
           stepNumber: state.stepNumber,
+          move: state.move,
           xisNext: action.isNext,
       }
       console.log("stepNumber:" + state.stepNumber);
@@ -46,6 +48,7 @@ function reducer(state = initialState, action) {
       return Object.assign({}, state, {
           past: state.past.concat(pastState),
           squares: newSquares,
+          move: action.recentMove,
           stepNumber: state.stepNumber + 1,
           xisNext: !action.isNext
       });

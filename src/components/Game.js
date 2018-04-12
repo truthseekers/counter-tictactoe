@@ -5,27 +5,42 @@ import Board from './Board';
 class Game extends React.Component {
 
     handleClick(i) {
-        //const squares = this.props.history[history.length - 1].squares;
-        //squares[i] = this.props.xisNext ? 'X' : 'O';
-        this.props.dispatch({ type: 'CLICKSQUARE', index: i, isNext: this.props.xisNext, squares: this.props.squares })
+        var moveState = this.calculateMoveState(this.props.xIsNext, i);
+        this.props.dispatch({ type: 'CLICKSQUARE', index: i, recentMove: moveState, isNext: this.props.xisNext, squares: this.props.squares })
     }
 
     jumpTo(i) {
         this.props.dispatch({ type: 'JUMPTO', index: i})
     }
 
+    calculateMoveState(bool, location){
+        if (bool) {
+            return location + " set to: " + "X";
+        } else {
+            return location + " set to: " + "O";
+        }
+    }
+
     render() {
         const current = {
             squares: this.props.squares,
             stepNumber: this.props.stepNumber,
+            move: this.props.move,
             xisNext: this.props.xisNext
         };
         const history = this.props.past;
         const allMoves = history.concat(current);
+        console.log("all moves");
+        console.log(allMoves);
         const moves = allMoves.map((step, move) => {
-            const desc = move ?
-                  'go to move #' + move :
-                  'Go to game start';
+//            var desc;
+//            console.log("move: ");
+//            console.log(allMoves[move]);
+            //            const desc = move ?
+
+            const desc = allMoves[move].move == "Go to game start" ? "Go to game start" :
+                  'Go to move #' + move + ": " + allMoves[move].move;
+//                  this.props.past[move].move;
             return (
                 <li key={move}>
                   <button onClick={() => this.jumpTo(move)}>
@@ -52,9 +67,9 @@ class Game extends React.Component {
 function mapStateToProps(state) {
   return {
       squares: state.squares,
-      //      history: state.history,
       past: state.past,
       stepNumber: state.stepNumber,
+      move: state.move,
       xisNext: state.xisNext,
       fontCurrent: 'normal'
   };
