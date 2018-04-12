@@ -15,10 +15,8 @@ class Game extends React.Component {
 
     calculateMoveState(bool, location){
         if (bool) {
-            console.log("I a x");
             return location + " set to: " + "X";
         } else {
-            console.log("I am O");
             return location + " set to: " + "O";
         }
     }
@@ -28,24 +26,20 @@ class Game extends React.Component {
             squares: this.props.squares,
             stepNumber: this.props.stepNumber,
             move: this.props.move,
+            fontState: this.props.fontState,
             xisNext: this.props.xisNext
         };
         const history = this.props.past;
-        const allMoves = history.concat(current);
-        console.log("all moves");
-        console.log(allMoves);
-        const moves = allMoves.map((step, move) => {
-//            var desc;
-//            console.log("move: ");
-//            console.log(allMoves[move]);
-            //            const desc = move ?
+        const allMoves = history;
+        const moves = history.map((step, move) => {
 
-            const desc = allMoves[move].move == "Go to game start" ? "Go to game start" :
-                  'Go to move #' + move + ": " + allMoves[move].move;
-//                  this.props.past[move].move;
+            const desc = history[move].move == "Go to game start" ? "Go to game start" :
+                  'Go to move #' + move + ": " + history[move].move;
+            //                  this.props.past[move].move;
+//            console.log(allMoves[move].fontState);
             return (
                 <li key={move}>
-                  <button style={{fontWeight: 'bold'}} onClick={() => this.jumpTo(move)}>
+                  <button style={{fontWeight: history[move].fontState}} onClick={() => this.jumpTo(move)}>
                     {desc}
                   </button>
                 </li>
@@ -73,7 +67,7 @@ function mapStateToProps(state) {
       stepNumber: state.stepNumber,
       move: state.move,
       xisNext: state.xisNext,
-      fontCurrent: 'normal'
+      fontState: state.fontState
   };
 }
 

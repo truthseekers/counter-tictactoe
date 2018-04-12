@@ -7,15 +7,22 @@ import { createStore } from 'redux';
 import Game from './components/Game';
 import './index.css';
 
+const initialPast = {
+    squares: Array(9).fill(null),
+    move: 'Go to game start',
+    stepNumber: 0,
+    fontState: 'bold',
+    xisNext: true,
+}
 const initialState = {
     count: 0,
-    past: [],
+    past: [initialPast],
     future: [],
     squares: Array(9).fill(null),
     move: 'Go to game start',
     stepNumber: 0,
+    fontState: 'bold',
     xisNext: true,
-    fontCurrent: 'normal'
 };
 
 function reducer(state = initialState, action) {
@@ -32,17 +39,19 @@ function reducer(state = initialState, action) {
   case 'CLICKSQUARE':
       var newSquares = state.squares.slice();
       newSquares[action.index] = state.xisNext ? 'X' : 'O';
+      var previousSquare = state.past.slice(-1);
+      console.log("previousSquare: ");
+      previousSquare[0].fontState = 'normal';
+      var updatedHistory; //
       var pastState = {
-          squares: state.squares,
-          stepNumber: state.stepNumber,
-          move: state.move,
-          xisNext: action.isNext,
+          squares: newSquares,
+          stepNumber: state.stepNumber + 1,
+          move: action.recentMove,
+          fontState: 'bold',
+          xisNext: !action.isNext,
       }
-      console.log("stepNumber:" + state.stepNumber);
-      if (state.stepNumber < state.past.length) {
-          console.log("stepNumber is: " + state.stepNumber + "past.length: " + state.past.length);
+      if (state.stepNumber + 1 < state.past.length) {
           state.past.splice(0, state.stepNumber);
-          console.log(state.past);
       }
 
       return Object.assign({}, state, {
@@ -50,25 +59,31 @@ function reducer(state = initialState, action) {
           squares: newSquares,
           move: action.recentMove,
           stepNumber: state.stepNumber + 1,
+          fontState: 'bold',
           xisNext: !action.isNext
       });
 
   case 'JUMPTO':
-      console.log("I jumped to move: " + action.index);
       var futureState = state.future;
       var oldCurrent = {
           squares: state.squares,
           stepNumber: state.stepNumber,
-          xisNext: state.xisNext
+          xisNext: state.xisNext,
+          fontState: 'normal'
       };
+      console.log("jump to: ");
+      state.past[state.stepNumber].fontState = 'normal';
+//      state.past[state.past.length].fontState = 'normal';
+      state.past[action.index].fontState = 'bold';
       var pastIncludingCurrent = state.past.concat(oldCurrent);
-      console.log("Pastincludingcurrent: ");
-      console.log(pastIncludingCurrent);
+     // console.log("Pastincludingcurrent: ");
+     // console.log(pastIncludingCurrent);
       var newCurrent = pastIncludingCurrent[action.index];
-      console.log("newCurrent: ");
-      console.log(newCurrent);
+     // console.log("newCurrent: ");
+     // console.log(newCurrent);
 
       if (state.past.length == state.stepNumber) {
+//          console.log("state.past.length == state.stepNumber");
           futureState = {
               squares: state.squares,
               stepNumber: state.stepNumber,
@@ -78,6 +93,7 @@ function reducer(state = initialState, action) {
       }
 
       if (action.index == state.past.length) {
+          console.log("action.index == state.past.length");
           return Object.assign({}, state, {
               squares: state.future.squares,
               stepNumber: state.future.stepNumber,
@@ -85,10 +101,13 @@ function reducer(state = initialState, action) {
           });
       }
 
+      console.log("returning... not in conditional");
       return Object.assign({}, state, {
           squares: newCurrent.squares,
           stepNumber: newCurrent.stepNumber,
           xisNext: newCurrent.xisNext,
+          move: newCurrent.move,
+          fontState: 'normal',
           future: futureState
       });
       
