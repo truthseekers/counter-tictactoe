@@ -45,7 +45,7 @@ class Game extends React.Component {
 //                  this.props.past[move].move;
             return (
                 <li key={move}>
-                  <button onClick={() => this.jumpTo(move)}>
+                  <button style={{fontWeight: 'bold'}} onClick={() => this.jumpTo(move)}>
                     {desc}
                   </button>
                 </li>
